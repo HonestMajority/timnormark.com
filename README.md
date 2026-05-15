@@ -27,6 +27,34 @@ Personal website and learning platform for Tim Normark.
 - Production is promoted manually from the exact image digest already running in staging.
 - Git is the source of truth for deployed versions.
 
+## Local Development
+
+Run the web application locally:
+
+```sh
+cargo run -p timnormark-web
+```
+
+The server listens on `http://localhost:3000` by default. Set `PORT` to use a
+different port.
+
+Useful checks:
+
+```sh
+cargo fmt --check
+cargo test
+cargo check
+```
+
+Current routes:
+
+- `/` landing page
+- `/tools` tools index
+- `/assets/*` static assets
+- `/api` API index
+- `/api/status` JSON status
+- `/health` health check
+
 ## Open Source Policy
 
 This repository is public by design. Do not commit secrets, Terraform state, kubeconfigs, real API keys, Vault keys, or production data.
