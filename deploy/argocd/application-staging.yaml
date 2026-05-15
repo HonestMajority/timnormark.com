@@ -9,7 +9,7 @@ metadata:
     argocd-image-updater.argoproj.io/timnormark.helm.image-name: image.repository
     argocd-image-updater.argoproj.io/timnormark.helm.image-tag: image.digest
     argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/write-back-target: helmvalues:deploy/helm/timnormark-com/values-staging.yaml
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:values-staging.yaml
 spec:
   project: default
   source:
