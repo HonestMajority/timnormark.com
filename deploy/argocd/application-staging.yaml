@@ -4,9 +4,10 @@ metadata:
   name: timnormark-com-staging
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: timnormark=ghcr.io/honestmajority/timnormark.com
+    argocd-image-updater.argoproj.io/image-list: timnormark=ghcr.io/honestmajority/timnormark.com:main
     argocd-image-updater.argoproj.io/timnormark.update-strategy: digest
-    argocd-image-updater.argoproj.io/timnormark.allow-tags: regexp:^main$
+    argocd-image-updater.argoproj.io/timnormark.helm.image-name: image.repository
+    argocd-image-updater.argoproj.io/timnormark.helm.image-tag: image.digest
     argocd-image-updater.argoproj.io/write-back-method: git
     argocd-image-updater.argoproj.io/write-back-target: helmvalues:deploy/helm/timnormark-com/values-staging.yaml
 spec:
