@@ -31,3 +31,6 @@ Personal website and learning platform for Tim Normark.
 
 This repository is public by design. Do not commit secrets, Terraform state, kubeconfigs, real API keys, Vault keys, or production data.
 
+## Documentation
+
+- [Architecture and process docs](docs/README.md)
