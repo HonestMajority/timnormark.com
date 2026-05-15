@@ -7,10 +7,12 @@ on:
 
 permissions:
   contents: read
-  packages: write
+  id-token: write
 
 env:
-  IMAGE_NAME: ghcr.io/honestmajority/timnormark.com
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN: ${{ vars.AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN }}
   DOCKERFILE: apps/web/Dockerfile
   BUILD_CONTEXT: .
 
@@ -28,13 +30,28 @@ jobs:
             echo "$DOCKERFILE is required before main image publishing can run." >&2
             exit 1
           }
+          test -n "$AWS_REGION" || {
+            echo "Repository variable AWS_REGION must be set before main image publishing can run." >&2
+            exit 1
+          }
+          test -n "$ECR_REPOSITORY" || {
+            echo "Repository variable ECR_REPOSITORY must be set before main image publishing can run." >&2
+            exit 1
+          }
+          test -n "$AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN" || {
+            echo "Repository variable AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN must be set before main image publishing can run." >&2
+            exit 1
+          }
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          role-to-assume: ${{ env.AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -43,5 +60,5 @@ jobs:
           file: ${{ env.DOCKERFILE }}
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:main
-            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:main
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}

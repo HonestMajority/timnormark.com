@@ -2,11 +2,6 @@ name: Promote staging digest to prod
 
 on:
   workflow_dispatch:
-    inputs:
-      digest:
-        description: Exact staging image digest to promote, for example sha256:...
-        required: true
-        type: string
 
 permissions:
   contents: write
@@ -23,7 +18,7 @@ jobs:
           ref: main
 
       - name: Update prod digest
-        run: scripts/promote-digest.sh "${{ inputs.digest }}"
+        run: scripts/promote-digest.sh
 
       - name: Create promotion pull request
         uses: peter-evans/create-pull-request@v6
@@ -32,8 +27,8 @@ jobs:
           title: "chore: promote prod image digest"
           commit-message: "chore: promote prod image digest"
           body: |
-            Promotes the image digest that has already been verified in staging.
+            Promotes the exact image digest currently configured in staging.
 
-            Digest: `${{ inputs.digest }}`
+            Staging digest: `${{ env.PROMOTED_DIGEST }}`
           add-paths: |
             deploy/helm/timnormark-com/values-prod.yaml

@@ -62,8 +62,18 @@ Current routes:
 - `deploy/helm/timnormark-com/values-staging.yaml` and `values-prod.yaml` define environment namespaces, hosts, and image digests.
 - `deploy/argocd/` owns Argo CD Applications. Image Updater is configured only for staging.
 - `.github/workflows/pr-checks.yaml` runs static delivery validation on pull requests.
-- `.github/workflows/build-main.yaml` publishes `ghcr.io/honestmajority/timnormark.com` from `apps/web/Dockerfile` after merges to `main`.
-- `.github/workflows/promote-prod.yaml` updates the prod Helm digest through a manual promotion pull request.
+- `.github/workflows/build-main.yaml` publishes the ECR image from `apps/web/Dockerfile` after merges to `main`.
+- `.github/workflows/promote-prod.yaml` copies the staging Helm digest into prod through a manual promotion pull request.
+
+The v1 delivery path assumes one AWS ECR repository, represented in scaffold
+files as `123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com`.
+Replace the placeholder AWS account, region, and repository name when the live
+AWS account is known. GitHub Actions must have an OIDC-backed IAM role in the
+`AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN` repository variable, plus `AWS_REGION`
+and `ECR_REPOSITORY` variables, before it can push to ECR. EKS nodes or pod
+IRSA configuration must be allowed to pull from the repository before the Helm
+release can run in-cluster. Argo CD Image Updater also needs ECR registry auth
+for the same account and region before staging digest write-back can work.
 
 ## Open Source Policy
 

@@ -14,3 +14,10 @@ These manifests define the desired GitOps shape for staging and prod.
 
 Replace placeholder repo URLs, Argo CD project names, destination servers, and
 hostnames when the live cluster setup is known.
+
+Image Updater is pointed at the placeholder ECR repository
+`123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com`. Replace the AWS
+account ID, region, and repository name once Terraform has created the live ECR
+repository. The Image Updater installation must be configured with registry auth
+for ECR in that AWS account and region, and the cluster must be able to pull the
+same image through node IAM or IRSA.

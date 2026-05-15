@@ -4,7 +4,7 @@ metadata:
   name: timnormark-com-staging
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: timnormark=ghcr.io/honestmajority/timnormark.com:main
+    argocd-image-updater.argoproj.io/image-list: timnormark=123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com:main
     argocd-image-updater.argoproj.io/timnormark.update-strategy: digest
     argocd-image-updater.argoproj.io/timnormark.helm.image-name: image.repository
     argocd-image-updater.argoproj.io/timnormark.helm.image-tag: image.digest

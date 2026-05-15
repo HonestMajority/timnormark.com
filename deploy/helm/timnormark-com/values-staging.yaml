@@ -3,7 +3,7 @@ namespace: timnormark-com-staging
 replicaCount: 1
 
 image:
-  repository: ghcr.io/honestmajority/timnormark.com
+  repository: 123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com
   tag: main
   digest: ""
   pullPolicy: IfNotPresent
