@@ -14,8 +14,18 @@ fi
 if command -v helm >/dev/null 2>&1; then
   helm lint "$ROOT_DIR/deploy/helm/timnormark-com" -f "$ROOT_DIR/deploy/helm/timnormark-com/values-staging.yaml"
   helm lint "$ROOT_DIR/deploy/helm/timnormark-com" -f "$ROOT_DIR/deploy/helm/timnormark-com/values-prod.yaml"
-  helm template timnormark-com "$ROOT_DIR/deploy/helm/timnormark-com" -f "$ROOT_DIR/deploy/helm/timnormark-com/values-staging.yaml" >/dev/null
-  helm template timnormark-com "$ROOT_DIR/deploy/helm/timnormark-com" -f "$ROOT_DIR/deploy/helm/timnormark-com/values-prod.yaml" >/dev/null
+  rendered_dir="$(mktemp -d)"
+  trap 'rm -rf "$rendered_dir"' EXIT
+  helm template timnormark-com "$ROOT_DIR/deploy/helm/timnormark-com" -f "$ROOT_DIR/deploy/helm/timnormark-com/values-staging.yaml" >"$rendered_dir/staging.yaml"
+  helm template timnormark-com "$ROOT_DIR/deploy/helm/timnormark-com" -f "$ROOT_DIR/deploy/helm/timnormark-com/values-prod.yaml" >"$rendered_dir/prod.yaml"
+  if grep -q '^kind: Ingress$' "$rendered_dir"/*.yaml; then
+    echo "unexpected Kubernetes Ingress rendered; app routing must use Gateway API" >&2
+    exit 1
+  fi
+  grep -q '^kind: Gateway$' "$rendered_dir/staging.yaml"
+  grep -q '^kind: HTTPRoute$' "$rendered_dir/staging.yaml"
+  grep -q '^kind: Gateway$' "$rendered_dir/prod.yaml"
+  grep -q '^kind: HTTPRoute$' "$rendered_dir/prod.yaml"
 else
   echo "helm not found; skipping helm lint/template"
 fi

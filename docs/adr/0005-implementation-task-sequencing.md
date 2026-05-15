@@ -17,7 +17,7 @@ Sequence implementation in small, reviewable tasks:
 3. Add a production container image build.
 4. Add GitHub Actions pull request checks.
 5. Add the AWS/Terraform foundation for EKS and required shared resources.
-6. Add Helm packaging for the app.
+6. Add Helm packaging for the app, including Gateway API routing.
 7. Add Argo CD staging reconciliation.
 8. Add Argo CD Image Updater Git write-back for staging image digests.
 9. Add manual GitHub Actions production promotion that commits the staging digest to production config.

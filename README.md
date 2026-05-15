@@ -18,6 +18,7 @@ Personal website and learning platform for Tim Normark.
 - Helm for Kubernetes application packaging.
 - Argo CD for GitOps delivery.
 - GitHub Actions for CI, image build, and production promotion.
+- Gateway API app routing through Envoy Gateway.
 
 ## Deployment Model
 
@@ -58,7 +59,8 @@ Current routes:
 ## Delivery Scaffold
 
 - `infra/terraform/` owns the AWS substrate scaffold, including ECR, VPC, and EKS.
-- `deploy/helm/timnormark-com/` owns Kubernetes app manifests.
+- `deploy/helm/timnormark-com/` owns Kubernetes app manifests, including the
+  app `Deployment`, `Service`, `Gateway`, and `HTTPRoute`.
 - `deploy/helm/timnormark-com/values-staging.yaml` and `values-prod.yaml` define environment namespaces, hosts, and image digests.
 - `deploy/argocd/` owns Argo CD Applications. Image Updater is configured only for staging.
 - `.github/workflows/pr-checks.yaml` runs static delivery validation on pull requests.
@@ -74,6 +76,12 @@ and `ECR_REPOSITORY` variables, before it can push to ECR. EKS nodes or pod
 IRSA configuration must be allowed to pull from the repository before the Helm
 release can run in-cluster. Argo CD Image Updater also needs ECR registry auth
 for the same account and region before staging digest write-back can work.
+
+Kubernetes app routing is modeled with Gateway API resources rendered by the
+Helm chart. The cluster must have Gateway API CRDs and Envoy Gateway installed,
+with an `envoy-gateway` `GatewayClass` available before Argo CD can reconcile the
+application routes. AWS remains substrate for EKS, DNS, certificates, and any
+load balancer integration exposed by the Envoy Gateway installation.
 
 ## Open Source Policy
 

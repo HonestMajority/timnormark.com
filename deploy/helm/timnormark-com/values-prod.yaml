@@ -8,17 +8,11 @@ image:
   digest: ""
   pullPolicy: IfNotPresent
 
-ingress:
+gateway:
   enabled: true
-  className: alb
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-  hosts:
-    - host: timnormark.example.com
-      paths:
-        - path: /
-          pathType: Prefix
+  route:
+    hostnames:
+      - timnormark.example.com
 
 env:
   - name: APP_ENV

@@ -38,16 +38,27 @@ service:
   port: 80
   targetPort: 8080
 
-ingress:
+gatewayClass:
+  create: false
+  name: envoy-gateway
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+gateway:
   enabled: false
-  className: alb
-  annotations: {}
-  hosts:
-    - host: timnormark.example.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+  route:
+    parentRefs:
+      - sectionName: http
+    hostnames:
+      - timnormark.example.com
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
 
 resources:
   requests:

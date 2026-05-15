@@ -13,9 +13,15 @@ real tfvars, kubeconfigs, state, or credentials.
 - EKS control plane and managed node groups.
 - IAM roles needed by cluster add-ons and delivery automation.
 - Optional DNS and certificate substrate when the AWS account details are known.
+- AWS load balancer integration required by the Envoy Gateway installation.
 - GitHub Actions OIDC IAM role permissions for ECR push when CI/CD ownership is
   known.
 - EKS node or IRSA permissions for Kubernetes image pulls from ECR.
+
+Kubernetes app routing is owned by the Helm chart through Gateway API resources.
+Terraform may provision AWS prerequisites for Envoy Gateway, DNS, certificates,
+and EKS networking, but it should not manage app `Gateway` or `HTTPRoute`
+objects.
 
 ## Bootstrap notes
 
