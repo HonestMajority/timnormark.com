@@ -1,0 +1,25 @@
+namespace: timnormark-com-staging
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/honestmajority/timnormark.com
+  tag: main
+  digest: ""
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  hosts:
+    - host: staging.timnormark.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+env:
+  - name: APP_ENV
+    value: staging

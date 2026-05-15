@@ -55,6 +55,16 @@ Current routes:
 - `/api/status` JSON status
 - `/health` health check
 
+## Delivery Scaffold
+
+- `infra/terraform/` owns the AWS substrate scaffold, including ECR, VPC, and EKS.
+- `deploy/helm/timnormark-com/` owns Kubernetes app manifests.
+- `deploy/helm/timnormark-com/values-staging.yaml` and `values-prod.yaml` define environment namespaces, hosts, and image digests.
+- `deploy/argocd/` owns Argo CD Applications. Image Updater is configured only for staging.
+- `.github/workflows/pr-checks.yaml` runs static delivery validation on pull requests.
+- `.github/workflows/build-main.yaml` publishes `ghcr.io/honestmajority/timnormark.com` from `apps/web/Dockerfile` after merges to `main`.
+- `.github/workflows/promote-prod.yaml` updates the prod Helm digest through a manual promotion pull request.
+
 ## Open Source Policy
 
 This repository is public by design. Do not commit secrets, Terraform state, kubeconfigs, real API keys, Vault keys, or production data.

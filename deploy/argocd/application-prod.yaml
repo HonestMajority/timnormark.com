@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: timnormark-com-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/HonestMajority/timnormark.com.git
+    targetRevision: main
+    path: deploy/helm/timnormark-com
+    helm:
+      valueFiles:
+        - values-prod.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: timnormark-com-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

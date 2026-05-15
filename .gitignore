@@ -25,10 +25,8 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-.terraform.lock.hcl
 
 # Local Kubernetes/secrets
 kubeconfig*
 *.pem
 *.key
-
