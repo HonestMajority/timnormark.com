@@ -36,7 +36,7 @@ securityContext:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 8080
+  targetPort: 3000
 
 gatewayClass:
   create: false
@@ -81,6 +81,6 @@ affinity: {}
 env: []
 
 health:
-  path: /healthz
+  path: /health
   initialDelaySeconds: 10
   periodSeconds: 10
