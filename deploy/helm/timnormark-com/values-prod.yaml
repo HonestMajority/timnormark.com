@@ -1,0 +1,19 @@
+namespace: timnormark-com-prod
+
+replicaCount: 2
+
+image:
+  repository: 123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com
+  tag: main
+  digest: ""
+  pullPolicy: IfNotPresent
+
+gateway:
+  enabled: true
+  route:
+    hostnames:
+      - timnormark.example.com
+
+env:
+  - name: APP_ENV
+    value: prod

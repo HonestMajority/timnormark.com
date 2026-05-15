@@ -1,0 +1,86 @@
+replicaCount: 1
+
+image:
+  repository: 123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com
+  tag: main
+  digest: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+gatewayClass:
+  create: false
+  name: envoy-gateway
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+gateway:
+  enabled: false
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+  route:
+    parentRefs:
+      - sectionName: http
+    hostnames:
+      - timnormark.example.com
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env: []
+
+health:
+  path: /health
+  initialDelaySeconds: 10
+  periodSeconds: 10

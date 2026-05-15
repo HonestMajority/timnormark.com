@@ -1,0 +1,64 @@
+name: Build main image
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN: ${{ vars.AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN }}
+  DOCKERFILE: Dockerfile
+  BUILD_CONTEXT: .
+
+jobs:
+  build:
+    name: Build and publish image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate app image placeholder
+        run: |
+          test -f "$DOCKERFILE" || {
+            echo "$DOCKERFILE is required before main image publishing can run." >&2
+            exit 1
+          }
+          test -n "$AWS_REGION" || {
+            echo "Repository variable AWS_REGION must be set before main image publishing can run." >&2
+            exit 1
+          }
+          test -n "$ECR_REPOSITORY" || {
+            echo "Repository variable ECR_REPOSITORY must be set before main image publishing can run." >&2
+            exit 1
+          }
+          test -n "$AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN" || {
+            echo "Repository variable AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN must be set before main image publishing can run." >&2
+            exit 1
+          }
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_GITHUB_ACTIONS_ECR_PUSH_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.BUILD_CONTEXT }}
+          file: ${{ env.DOCKERFILE }}
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:main
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}

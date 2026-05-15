@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: timnormark-com-staging
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: timnormark=123456789012.dkr.ecr.eu-north-1.amazonaws.com/timnormark-com:main
+    argocd-image-updater.argoproj.io/timnormark.update-strategy: digest
+    argocd-image-updater.argoproj.io/timnormark.helm.image-name: image.repository
+    argocd-image-updater.argoproj.io/timnormark.helm.image-tag: image.digest
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:values-staging.yaml
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/HonestMajority/timnormark.com.git
+    targetRevision: main
+    path: deploy/helm/timnormark-com
+    helm:
+      valueFiles:
+        - values-staging.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: timnormark-com-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

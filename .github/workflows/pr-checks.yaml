@@ -1,0 +1,26 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  delivery-scaffold:
+    name: Delivery scaffold validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Validate delivery files
+        run: scripts/validate-delivery.sh

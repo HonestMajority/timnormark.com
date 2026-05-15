@@ -14,5 +14,6 @@ This directory records the initial technical direction for timnormark.com. The d
 
 - Application: one Rust web app serving plain HTML, CSS, and JavaScript.
 - Platform: AWS EKS managed with Terraform, packaged with Helm, and reconciled by Argo CD.
+- Routing: Kubernetes Gateway API with Envoy Gateway for v1 app traffic.
 - Delivery: GitHub Actions for checks, image builds, and manual production promotion.
 - Secrets: no secrets, state, kubeconfigs, real API keys, Vault unseal keys, or production data in Git.

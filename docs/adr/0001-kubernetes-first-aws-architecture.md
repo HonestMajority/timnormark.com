@@ -17,6 +17,7 @@ Use a Kubernetes-first architecture on AWS:
 - AWS EKS for Kubernetes.
 - Terraform for AWS infrastructure.
 - Helm for Kubernetes application packaging.
+- Gateway API app routing through Envoy Gateway.
 - Argo CD for GitOps reconciliation.
 - GitHub Actions for pull request checks, image builds, and production promotion.
 
@@ -33,4 +34,6 @@ The initial repo remains a monorepo. Application code, infrastructure code, Helm
 
 - Do not introduce extra services until the Rust app needs them.
 - Prefer boring platform defaults over custom controllers or bespoke deployment automation.
+- Keep Terraform focused on AWS substrate; Kubernetes application routing belongs
+  in Helm as Gateway API resources and is reconciled by Argo CD.
 - Keep all cloud credentials, Terraform state, kubeconfigs, and real secrets outside the public repository.
