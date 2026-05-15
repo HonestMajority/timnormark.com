@@ -62,7 +62,7 @@ Current routes:
 - `deploy/helm/timnormark-com/values-staging.yaml` and `values-prod.yaml` define environment namespaces, hosts, and image digests.
 - `deploy/argocd/` owns Argo CD Applications. Image Updater is configured only for staging.
 - `.github/workflows/pr-checks.yaml` runs static delivery validation on pull requests.
-- `.github/workflows/build-main.yaml` publishes the ECR image from `apps/web/Dockerfile` after merges to `main`.
+- `.github/workflows/build-main.yaml` publishes the ECR image from the root `Dockerfile` after merges to `main`.
 - `.github/workflows/promote-prod.yaml` copies the staging Helm digest into prod through a manual promotion pull request.
 
 The v1 delivery path assumes one AWS ECR repository, represented in scaffold
