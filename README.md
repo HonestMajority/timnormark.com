@@ -20,6 +20,26 @@ Personal website and learning platform for Tim Normark.
 - GitHub Actions for CI, image build, and production promotion.
 - Gateway API app routing through Envoy Gateway.
 
+## Temporary Static Production Lane (Cloudflare Tunnel)
+
+While the AWS/EKS lane below is being built out, timnormark.com is served as a
+plain static site from a local machine through an existing Cloudflare Tunnel:
+
+- `site/` holds the static bio page (plain HTML and CSS, no build step).
+- `ops/static-prod/` holds the nginx config and Docker Compose file. The stack
+  runs stock `nginx:alpine` as compose project `timnormark-static-prod` and
+  publishes `localhost:17310` by default (override with
+  `TIMNORMARK_STATIC_PROD_PORT`).
+- `just run-static-prod` starts the stack and waits for it to be healthy;
+  `just static-prod-down` stops it.
+- The local `cloudflared` tunnel config (outside this repo) maps
+  `timnormark.com` to the published port. Repointing the tunnel is a manual
+  step and is not managed here.
+
+This lane is temporary and additive. It does not replace the Rust application
+or the Kubernetes/AWS delivery scaffold; when the EKS lane goes live, DNS moves
+there and this lane is retired.
+
 ## Deployment Model
 
 - Pull requests run checks only.

@@ -1,0 +1,27 @@
+# Temporary static production lane for timnormark.com.
+#
+# Serves the repo's site/ directory with stock nginx:alpine on localhost, to
+# be exposed through the existing local Cloudflare Tunnel. Deliberately boring:
+# no build step, no app runtime. See the "Temporary Static Production Lane"
+# section in the root README.md, and the Justfile recipes run-static-prod /
+# static-prod-down.
+#
+# Host port defaults to 17310; override with TIMNORMARK_STATIC_PROD_PORT.
+
+name: timnormark-static-prod
+
+services:
+  static:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${TIMNORMARK_STATIC_PROD_PORT:-17310}:80"
+    volumes:
+      - ../../site:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
