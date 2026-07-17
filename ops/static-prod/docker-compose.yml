@@ -15,7 +15,7 @@ services:
     image: nginx:alpine
     restart: unless-stopped
     ports:
-      - "${TIMNORMARK_STATIC_PROD_PORT:-17310}:80"
+      - "127.0.0.1:${TIMNORMARK_STATIC_PROD_PORT:-17310}:80"
     volumes:
       - ../../site:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
