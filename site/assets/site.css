@@ -1,18 +1,18 @@
-/* timnormark.com — static bio.
-   Warm-paper editorial palette, serif display over system stacks.
-   No external fonts, scripts, or assets. */
+/* timnormark.com - static bio.
+   Printed-sheet layout on warm paper, serif display over system stacks,
+   copper accent. No external fonts, scripts, or assets. */
 
 :root {
   color-scheme: light;
-  --paper: #f7f4ed;
-  --panel: #fffdf8;
-  --ink: #221e17;
-  --ink-soft: #4a4437;
-  --muted: #6a6353;
-  --line: #e0d9c9;
-  --line-strong: #cdc4b0;
-  --accent: #9c4a21;
-  --accent-deep: #7c3a1a;
+  --paper: #efe9db;
+  --panel: #fbf8f1;
+  --ink: #1f1a13;
+  --ink-soft: #453e31;
+  --muted: #6e6656;
+  --line: #ded5c2;
+  --line-strong: #c6bba3;
+  --accent: #8f3e1c;
+  --accent-deep: #6f2f14;
 }
 
 * {
@@ -28,19 +28,20 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: clamp(0.9rem, 3vw, 2.75rem) clamp(0.75rem, 3vw, 2rem);
   background: var(--paper);
   color: var(--ink);
   font-family:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
-  border-top: 3px solid var(--accent);
   -webkit-text-size-adjust: 100%;
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--paper);
+  color: var(--panel);
 }
 
 a {
@@ -59,7 +60,7 @@ a:focus-visible {
   z-index: 10;
   padding: 0.5rem 0.9rem;
   background: var(--ink);
-  color: var(--paper);
+  color: var(--panel);
   border-radius: 0 0 6px 6px;
   text-decoration: none;
   font-size: 0.85rem;
@@ -70,44 +71,63 @@ a:focus-visible {
   top: 0;
 }
 
-.wrap {
+/* --- Sheet ------------------------------------------------------------------ */
+
+.sheet {
   width: 100%;
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 1.25rem;
+  max-width: 60rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 clamp(1.25rem, 5vw, 4.25rem);
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-top: 4px solid var(--accent);
+  box-shadow:
+    0 1px 2px rgba(52, 40, 20, 0.06),
+    0 14px 40px rgba(52, 40, 20, 0.08);
 }
 
-/* --- Header ---------------------------------------------------------------- */
-
-.site-header {
-  border-bottom: 1px solid var(--line);
+main {
+  flex: 1;
 }
 
-.site-header .wrap {
+/* --- Masthead --------------------------------------------------------------- */
+
+.masthead {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding-top: 1.35rem;
-  padding-bottom: 1.35rem;
+  padding: 1.5rem 0 1.35rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .brand,
 h1,
-h2,
-h3 {
+h3,
+.now-note {
   font-family:
     "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
     Georgia, "Times New Roman", serif;
 }
 
 .brand {
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
-.site-tag {
+.brand-mark {
+  display: inline-block;
+  width: 0.58rem;
+  height: 0.58rem;
+  margin-right: 0.6rem;
+  background: var(--accent);
+  vertical-align: 0.04em;
+}
+
+.masthead-tag {
   color: var(--muted);
   font-size: 0.74rem;
   font-weight: 600;
@@ -115,32 +135,17 @@ h3 {
   text-transform: uppercase;
 }
 
-.site-tag::before {
-  content: "";
-  display: inline-block;
-  width: 0.45em;
-  height: 0.45em;
-  margin-right: 0.6em;
-  border-radius: 50%;
-  background: var(--accent);
-  vertical-align: 0.08em;
-}
-
-/* --- Hero ------------------------------------------------------------------ */
-
-main {
-  flex: 1;
-}
+/* --- Hero ------------------------------------------------------------------- */
 
 .hero {
-  padding: 4.5rem 0 3.5rem;
+  padding: clamp(3rem, 8vw, 5rem) 0 clamp(2.5rem, 6vw, 3.75rem);
 }
 
 .eyebrow {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.2rem;
   color: var(--accent);
   font-size: 0.78rem;
   font-weight: 700;
@@ -164,42 +169,52 @@ p {
 }
 
 h1 {
-  margin-bottom: 1.25rem;
-  max-width: 14em;
-  font-size: clamp(2.5rem, 7vw, 4.25rem);
+  margin-bottom: 1.3rem;
+  max-width: 15em;
+  font-size: clamp(2.35rem, 6.5vw, 4rem);
   font-weight: 600;
-  line-height: 1.04;
+  line-height: 1.06;
   letter-spacing: -0.015em;
   text-wrap: balance;
 }
 
-.lede {
-  max-width: 33em;
-  margin-bottom: 0;
-  color: var(--ink-soft);
-  font-size: clamp(1.1rem, 2.6vw, 1.25rem);
-  line-height: 1.55;
+.hero-em {
+  font-style: italic;
+  color: var(--accent);
 }
 
-/* --- Labelled sections ----------------------------------------------------- */
+.lede {
+  max-width: 35em;
+  margin-bottom: 0;
+  color: var(--ink-soft);
+  font-size: clamp(1.08rem, 2.4vw, 1.22rem);
+  line-height: 1.6;
+}
+
+/* --- Labelled sections ------------------------------------------------------ */
 
 .section {
   display: grid;
-  grid-template-columns: 10rem minmax(0, 1fr);
-  gap: 1rem 2.5rem;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1rem 3rem;
   border-top: 1px solid var(--line);
-  padding: 2.5rem 0;
+  padding: 2.6rem 0;
 }
 
 .section h2 {
   margin: 0;
-  padding-top: 0.2rem;
+  padding-top: 0.25rem;
   color: var(--muted);
-  font-family: inherit;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+.sec-num {
+  margin-right: 0.7em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
 }
 
 .section-body {
@@ -207,89 +222,100 @@ h1 {
 }
 
 .section-body > p {
-  max-width: 36em;
+  max-width: 38em;
   margin-bottom: 1.1rem;
   color: var(--ink-soft);
-  font-size: 1.02rem;
+  font-size: 1.03rem;
 }
 
 .section-body > p:last-child {
   margin-bottom: 0;
 }
 
-/* --- Focus list ------------------------------------------------------------ */
+/* --- Focus grid ------------------------------------------------------------- */
 
 .focus-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1.75rem 2.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
   margin: 0;
   padding: 0;
   list-style: none;
+  background: var(--line);
+  border: 1px solid var(--line);
 }
 
 .focus-list li {
-  border-top: 2px solid var(--line-strong);
-  padding-top: 0.9rem;
+  background: var(--panel);
+  padding: 1.35rem 1.5rem 1.5rem;
 }
 
 .focus-list h3 {
-  margin-bottom: 0.4rem;
-  font-size: 1.12rem;
+  margin-bottom: 0.45rem;
+  font-size: 1.13rem;
   font-weight: 600;
   letter-spacing: -0.005em;
+}
+
+.focus-list h3::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.6rem;
+  background: var(--accent);
+  vertical-align: 0.08em;
 }
 
 .focus-list p {
   margin-bottom: 0;
   color: var(--muted);
-  font-size: 0.94rem;
+  font-size: 0.95rem;
   line-height: 1.55;
 }
 
-/* --- Next note ------------------------------------------------------------- */
+/* --- Now note --------------------------------------------------------------- */
 
-.next-note {
+.now-note {
+  max-width: 32em;
   border-left: 3px solid var(--accent);
-  padding-left: 1.1rem;
+  padding-left: 1.2rem;
   font-style: italic;
+  font-size: 1.12rem;
+  color: var(--ink-soft);
 }
 
-/* --- Footer ---------------------------------------------------------------- */
+/* --- Footer ----------------------------------------------------------------- */
 
 .site-footer {
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.site-footer .wrap {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.35rem 1.5rem;
-  padding-top: 1.5rem;
-  padding-bottom: 2.25rem;
+  padding: 1.4rem 0 1.7rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
 }
 
 .site-footer p {
   margin: 0;
 }
 
-/* --- Small screens --------------------------------------------------------- */
+/* --- Small screens ---------------------------------------------------------- */
 
 @media (max-width: 720px) {
   .hero {
-    padding: 3rem 0 2.5rem;
+    padding: 2.75rem 0 2.25rem;
   }
 
   .section {
     grid-template-columns: 1fr;
-    gap: 1.1rem;
+    gap: 1rem;
     padding: 2rem 0;
   }
 
   .focus-list {
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
   }
 }
